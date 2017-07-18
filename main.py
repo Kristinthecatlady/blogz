@@ -35,10 +35,11 @@ def post_form():
     if request.method == "POST":
         title = request.form["title"]
         body = request.form["body"]
+        owner = request.form["owner"]
         if body == "" or title == "":
             flash("Make sure to fill out both fields please!", "error")
             return redirect("/post_form")
-        new_post = Post(title, body)
+        new_post = Post(title, body, owner)
         db.session.add(new_post)
         db.session.commit()
         return redirect("/blog?id=" + str(new_post.id))
@@ -90,7 +91,7 @@ def login():
         if user and user.password == password:
             session['email'] = email
             flash("Logged In")
-            return redirect('/')
+            return redirect('/blog')
         else:
             flash('User or password incorrect, or user does not exist', 'error')
            
