@@ -20,14 +20,15 @@ def require_login():
 def index():
     return render_template('index.html')
 
-@app.route("/blog")
+@app.route("/blog", methods = ["POST", "GET"])
 def blog():
     num = request.args.get('id')
+    post = Post.query.filter_by(id=num).first()
     if num:
-        post = Post.query.get(num)
-        return render_template('blog.html', post=post)
+        return render_template('justone.html', posts=post)
     else:
-        posts = Post.query.all()
+        owner = User.query.filter_by(email=session['email']).first()
+        posts = Post.query.filter_by(owner=owner).all()
         return render_template('allposts.html', title="Blog", posts=posts)  
         
 @app.route('/post_form', methods=["POST", "GET"])   
@@ -42,8 +43,8 @@ def post_form():
         new_post = Post(title, body, owner)
         db.session.add(new_post)
         db.session.commit()
-        return redirect("/blog?id=" + str(new_post.id))
-
+        return redirect("/blog?id=" + str(new_post.id)) #Is this where the uniqueness happens?
+           
     return render_template("blog.html", title="New Post")
 
 
@@ -61,13 +62,11 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
     body = db.Column(db.String(1000))
-    likes = db.Column(db.Integer)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __init__(self, title, body, owner):
         self.title = title
         self.body = body
-        self.likes = 0
         self.owner = owner
 
 class User(db.Model):
@@ -91,7 +90,7 @@ def login():
         if user and user.password == password:
             session['email'] = email
             flash("Logged In")
-            return redirect('/blog')
+            return redirect('/blog')#Is this why the posts are not unique?
         else:
             flash('User or password incorrect, or user does not exist', 'error')
            
