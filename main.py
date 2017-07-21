@@ -12,7 +12,7 @@ app.secret_key = "7"
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup']
+    allowed_routes = ['login', 'signup', 'logout']
     if request.endpoint not in allowed_routes and 'email' not in session:
         return redirect('/login')
 
@@ -25,7 +25,7 @@ def blog():
     num = request.args.get('id')
     if num:
         post = Post.query.get(num)
-        return render_template('addnew.html', post=post)
+        return render_template('blog.html', post=post)
     else:
         posts = Post.query.all()
         return render_template('allposts.html', title="Blog", posts=posts)  
@@ -122,24 +122,7 @@ def signup():
 @app.route('/logout')
 def logout():
     del session['email']
-    return redirect('/')
-
-#@app.route('/', methods = ['POST', 'GET'])
-#def index():
-
- #   owner = User.query.filter_by(email=session['email']).first()
-
-  #  if request.method == 'POST':
-   #     task_name = request.form['task']
-    #    new_task = Task(task_name, owner)
-     #   db.session.add(new_task)
-      #  db.session.commit()
-
-  #  tasks = Task.query.filter_by(completed=False, owner=owner).all()
-   # completed_tasks = Task.query.filter_by(completed=True,owner=owner).all()
-    #return render_template('todos.html', title="Blogz!", 
-     #   tasks=tasks, completed_tasks=completed_tasks)
-
+    return redirect('/logout')
 
 if __name__ == '__main__':
     app.run()
