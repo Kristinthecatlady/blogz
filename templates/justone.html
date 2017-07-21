@@ -3,7 +3,11 @@
 {% block content %}
 <h3> Here is the post you just made:</h3>
 <p>
-<a href="/blog?id={{post.id}}">{{post.title}}<a/>
+{{post.title}}
+</br>{{post.body}}
+<form method="POST" action="/delete_post">
+    <input type="submit"  value="Delete this post"/>
+</form>
 </p>
 <hr/>
 <a href="/blog">See all my posts</a>

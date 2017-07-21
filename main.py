@@ -25,7 +25,7 @@ def blog():
     num = request.args.get('id')
     post = Post.query.filter_by(id=num).first()
     if num:
-        return render_template('justone.html', posts=post)
+        return render_template('justone.html', post=post)
     else:
         owner = User.query.filter_by(email=session['email']).first()
         posts = Post.query.filter_by(owner=owner).all()
@@ -43,7 +43,7 @@ def post_form():
         new_post = Post(title, body, owner)
         db.session.add(new_post)
         db.session.commit()
-        return redirect("/blog?id=" + str(new_post.id)) #Is this where the uniqueness happens?
+        return redirect("/blog?id=" + str(new_post.id))
            
     return render_template("blog.html", title="New Post")
 
@@ -51,7 +51,7 @@ def post_form():
 @app.route("/delete_post", methods=['POST', 'GET'])
 def delete():
     if request.method == "POST":
-        post_id = int(request.form["post-id"])
+        post_id = int(request.form["id"])
         post = Post.query.get(post_id)
         db.session.delete(post)
         db.session.commit()
@@ -90,7 +90,7 @@ def login():
         if user and user.password == password:
             session['email'] = email
             flash("Logged In")
-            return redirect('/blog')#Is this why the posts are not unique?
+            return redirect('/blog')
         else:
             flash('User or password incorrect, or user does not exist', 'error')
            
@@ -121,7 +121,7 @@ def signup():
 @app.route('/logout')
 def logout():
     del session['email']
-    return redirect('/logout')
+    return render_template('logout.html')
 
 if __name__ == '__main__':
     app.run()
