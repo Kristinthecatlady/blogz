@@ -35,7 +35,7 @@ def post_form():
     if request.method == "POST":
         title = request.form["title"]
         body = request.form["body"]
-        owner = request.form["owner"]
+        owner = User.query.filter_by(email=session['email']).first()
         if body == "" or title == "":
             flash("Make sure to fill out both fields please!", "error")
             return redirect("/post_form")
