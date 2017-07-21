@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] ='mysql+pymysql://blogz:blogz@localhost:8889/blogz'
-app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_ECHO'] = False
 
 db = SQLAlchemy(app)
 app.secret_key = "7"
@@ -47,15 +47,6 @@ def post_form():
            
     return render_template("blog.html", title="New Post")
 
-
-@app.route("/delete_post", methods=['POST', 'GET'])
-def delete():
-    if request.method == "POST":
-        post_id = int(request.form["id"])
-        post = Post.query.get(post_id)
-        db.session.delete(post)
-        db.session.commit()
-    return redirect('/blog')
 
 class Post(db.Model):
 
