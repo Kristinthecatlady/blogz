@@ -29,7 +29,13 @@ def blog():
     else:
         owner = User.query.filter_by(email=session['email']).first()
         posts = Post.query.filter_by(owner=owner).all()
-        return render_template('allposts.html', title="Blog", posts=posts)  
+        return render_template('allposts.html', title="Blog", posts=posts)
+
+@app.route("/allposts")
+def allposts():
+    id = int(request.args.get('id'))
+    posts = Post.query.filter_by(owner_id=id).all()
+    return render_template('allposts.html', posts=posts)  
         
 @app.route('/post_form', methods=["POST", "GET"])   
 def post_form():
@@ -124,6 +130,11 @@ def everyone():
         owner = User.query.filter_by(email=session['email']).first()
         posts = Post.query.all()
         return render_template('everyone.html', title="Blog", posts=posts)
+
+@app.route('/authorlist')
+def authorlist():
+    users = User.query.all()
+    return render_template('authorlist.html', users=users)
 
 @app.route('/home')
 def home():

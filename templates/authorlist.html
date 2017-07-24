@@ -3,6 +3,9 @@
 {% block content %}
         <h1>Blogz</h1>
         
-        
+{% for user in users %}
+    <li><a href='/allposts?id={{user.id}}'>{{user.email}}</a></li>       
+{% endfor %}
+    </ul>
 
 {% endblock %}

@@ -11,7 +11,7 @@
             <ul>
                 {% for post in posts %}
 
-                <li><a href='/justone?{{post.id}}'>{{post.title}}</a>
+                <li><a href='/blog?id={{post.id}}'>{{post.title}}</a>
                     
                 </li>
                 {% endfor %}
@@ -19,14 +19,6 @@
         {% endif %}
 
         <hr/>
-        <h4><a href='/blog'>See All My Posts</a></h4>
-        <h4>
-            <a href="/post_form">
-                Make A New Post
-            </a>
-        </h4>
-        <h4>
-            <a href="/logout">Log Out</a>
-        </h4>
+      
 
 {% endblock %}
