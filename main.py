@@ -12,7 +12,7 @@ app.secret_key = "7"
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'logout']
+    allowed_routes = ['login', 'signup', 'logout', 'index']
     if request.endpoint not in allowed_routes and 'email' not in session:
         return redirect('/login')
 
@@ -81,7 +81,7 @@ def login():
         if user and user.password == password:
             session['email'] = email
             flash("Logged In")
-            return redirect('/blog')
+            return redirect('/home')
         else:
             flash('User or password incorrect, or user does not exist', 'error')
            
@@ -113,6 +113,21 @@ def signup():
 def logout():
     del session['email']
     return render_template('logout.html')
+
+@app.route('/everyone')
+def everyone():
+    num = request.args.get('owner')
+    post = Post.query.filter_by(id=num).first()
+    if num:
+        return render_template('justone.html', post=post)
+    else:
+        owner = User.query.filter_by(email=session['email']).first()
+        posts = Post.query.all()
+        return render_template('everyone.html', title="Blog", posts=posts)
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 if __name__ == '__main__':
     app.run()
