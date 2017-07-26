@@ -131,9 +131,8 @@ def everyone():
     if num:
         return render_template('justone.html', post=post)
     else:
-        owner = User.query.filter_by(email=session['email']).first()
         posts = Post.query.all()
-        return render_template('everyone.html', title="Blog", posts=posts, users=users)
+        return render_template('everyone.html', title="Blog", posts=posts)
 
 @app.route('/authorlist')
 def authorlist():

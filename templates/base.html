@@ -21,11 +21,10 @@
         <a href='/everyone'>See Everyone's Posts</a>
         <a href='/authorlist'>See list of Posters</a>
         <a href="/post_form">Make A New Post</a>
-        <a href="/logout">Log Out</a>
         {% if 'email' in session %}
-        
         <a href='/blog'>See All My Posts</a>
-       {% endif %}
+        <a href="/logout">Log Out</a>
+        {% endif %}
         </nav>
         {% with messages = get_flashed_messages(with_categories=True) %}
             <ul>
