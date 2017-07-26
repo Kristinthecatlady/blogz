@@ -12,13 +12,12 @@ app.secret_key = "7"
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'logout', 'index', 'everyone']
+    allowed_routes = ['login', 'signup', 'logout', 'index', 'blog', 'everyone']
     if request.endpoint not in allowed_routes and 'email' not in session:
         return redirect('/login')
 
 @app.route('/')
 def index():
-    owner = User.query.filter_by(email=session['email']).first()
     posts = Post.query.all()
     users = User.query.all()
     return render_template('index.html', title="Blog", posts=posts, users=users)
@@ -102,9 +101,9 @@ def signup():
         email = request.form['email']
         password = request.form['password']
         verify = request.form['pw_check']
-        
-        #TODO - *Validate user data
-
+         
+         #TODO - *Validate user data
+ 
         existing_user = User.query.filter_by(email=email).first()
         if not existing_user:
             new_user = User(email, password)
@@ -113,7 +112,7 @@ def signup():
             session['email'] = email
             return redirect('/blog')
         else:
-            #TODO - user better response message
+            
             return "<h1>Duplicate User</h1>"
 
     return render_template('signup.html')
@@ -121,7 +120,8 @@ def signup():
 @app.route('/logout')
 def logout():
     del session['email']
-    return render_template('logout.html')
+    flash("Logged Out")
+    return redirect('/')
 
 @app.route('/everyone')
 def everyone():
