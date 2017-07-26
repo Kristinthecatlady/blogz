@@ -7,10 +7,22 @@
     <body>
 {%block content %}
 <h1>Welcome to Kristin's Blogz Elephant!</h1>
-<h3>You must log in to view and/or post</h3>
+<h3>You must log in to post</h3>
 <a href="/login">Existing Users Log In Here</a>
 </br>
 <a href="/signup">Need An Account? Start Here</a>
+<h3>Latest Posts</h3>
+<ul>
+                {% for post in posts %}
+
+                <li><a href='/blog?id={{post.id}}'>{{post.title}}</a>
+                </br>
+                <a href='/allposts?id={{post.owner.id}}'>{{post.owner.email}}</a>
+                    
+                </li>
+                {% endfor %}
+            </ul>
+
 
 {% endblock %}
 </body>

@@ -12,13 +12,16 @@ app.secret_key = "7"
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'logout', 'index']
+    allowed_routes = ['login', 'signup', 'logout', 'index', 'everyone']
     if request.endpoint not in allowed_routes and 'email' not in session:
         return redirect('/login')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    owner = User.query.filter_by(email=session['email']).first()
+    posts = Post.query.all()
+    users = User.query.all()
+    return render_template('index.html', title="Blog", posts=posts, users=users)
 
 @app.route("/blog", methods = ["POST", "GET"])
 def blog():
@@ -124,12 +127,13 @@ def logout():
 def everyone():
     num = request.args.get('owner')
     post = Post.query.filter_by(id=num).first()
+    users = User.query.all()
     if num:
         return render_template('justone.html', post=post)
     else:
         owner = User.query.filter_by(email=session['email']).first()
         posts = Post.query.all()
-        return render_template('everyone.html', title="Blog", posts=posts)
+        return render_template('everyone.html', title="Blog", posts=posts, users=users)
 
 @app.route('/authorlist')
 def authorlist():

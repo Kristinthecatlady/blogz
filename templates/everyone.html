@@ -12,6 +12,8 @@
                 {% for post in posts %}
 
                 <li><a href='/blog?id={{post.id}}'>{{post.title}}</a>
+                </br>
+                <a href='/allposts?id={{post.owner.id}}'>{{post.owner.email}}</a>
                     
                 </li>
                 {% endfor %}
